@@ -1,0 +1,20 @@
+{
+  "definitions": {},
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "title": "RequestV1TicketPostBodyModel",
+  "required": ["username","description"],
+  "properties": {
+    "username": {
+      "type": "string",
+      "title": "Username",
+      "pattern": "[A-Za-z0-9]{4,10}"
+    },
+    "description": {
+      "type": "string",
+      "title": "Description",
+      "minLength": 5,
+      "maxLength": 100
+    }
+  }
+}

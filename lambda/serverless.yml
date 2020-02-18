@@ -1,0 +1,52 @@
+# TODO replace `stevena` with unique prefix for naming/identifying your deployed resources
+service: stevena-validate # AWS names API Gateway based on service name and does not like long names
+
+# frameworkVersion: "=X.X.X"
+
+provider:
+  name: aws
+  runtime: nodejs10.x
+  stage: dev
+  apiName: stevena-validate-gateway
+
+functions:
+  # Using a single function to demo an API solution split with two versions each with different schema/interface
+  ValidatedRequest:
+    handler: validated-request.handler
+    events:
+      # v1
+      - http:
+          path: v1/tickets
+          method: get
+      - http:
+          path: v1/tickets
+          method: post
+          request:
+            schema:
+              application/json: ${file(schema_v1_tickets_post.json)}
+      # v2
+      - http:
+          path: v2/tickets
+          method: get
+      - http:
+          path: v2/tickets
+          method: post
+          request:
+            schema:
+              application/json: ${file(schema_v2_tickets_post.json)}
+
+resources:
+  Resources:
+    ApiGatewayRestApi:
+      Type: AWS::ApiGateway::RestApi
+      Properties:
+        Name: ${self:provider.stage}-${self:service}
+    GatewayResponseResourceNotFound:
+      Type: 'AWS::ApiGateway::GatewayResponse'
+      Properties:
+        RestApiId:
+          Ref: 'ApiGatewayRestApi'
+        ResponseType: BAD_REQUEST_BODY
+        "StatusCode" : "422"
+        ResponseTemplates:
+          application/json: "{\"message\": \"$context.error.message\", \"error\": \"$context.error.validationErrorString\"}"
