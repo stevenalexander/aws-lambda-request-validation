@@ -2,13 +2,18 @@
   "definitions": {},
   "$schema": "http://json-schema.org/draft-04/schema#",
   "type": "object",
-  "title": "RequestV2TicketPostBodyModel",
-  "required": ["username","description","priority"],
+  "title": "v1TicketResponse",
+  "required": ["id","username","description","status","createdDate"],
   "properties": {
+    "id": {
+      "type": "integer",
+      "title": "Id",
+      "minimum": 0
+    },
     "username": {
       "type": "string",
       "title": "Username",
-      "pattern": "[A-Za-z0-9]{4,10}"
+      "pattern": "^[A-Za-z0-9]{4,10}$"
     },
     "description": {
       "type": "string",
@@ -16,10 +21,10 @@
       "minLength": 5,
       "maxLength": 100
     },
-    "priority": {
+    "status": {
       "type": "string",
-      "title": "Priority (new required field in V2)",
-      "enum": ["high", "medium", "low"]
+      "title": "Status",
+      "enum": ["open", "in_progress", "closed"]
     }
   }
 }

@@ -1,0 +1,35 @@
+{
+  "definitions": {},
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "title": "v2TicketResponse",
+  "required": ["id","username","description","priority","status","createdDate"],
+  "properties": {
+    "id": {
+      "type": "integer",
+      "title": "Id",
+      "minimum": 0
+    },
+    "username": {
+      "type": "string",
+      "title": "Username",
+      "pattern": "^[A-Za-z0-9]{4,10}$"
+    },
+    "description": {
+      "type": "string",
+      "title": "Description",
+      "minLength": 5,
+      "maxLength": 100
+    },
+    "priority": {
+      "type": "string",
+      "title": "Priority (new required field in V2)",
+      "enum": ["high", "medium", "low"]
+    },
+    "status": {
+      "type": "string",
+      "title": "Status",
+      "enum": ["open", "in_progress", "closed"]
+    }
+  }
+}

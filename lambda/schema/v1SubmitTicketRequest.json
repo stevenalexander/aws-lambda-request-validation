@@ -2,13 +2,13 @@
   "definitions": {},
   "$schema": "http://json-schema.org/draft-04/schema#",
   "type": "object",
-  "title": "RequestV1TicketPostBodyModel",
+  "title": "v1SubmitTicketRequest",
   "required": ["username","description"],
   "properties": {
     "username": {
       "type": "string",
       "title": "Username",
-      "pattern": "[A-Za-z0-9]{4,10}"
+      "pattern": "^[A-Za-z0-9]{4,10}$"
     },
     "description": {
       "type": "string",

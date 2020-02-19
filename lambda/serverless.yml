@@ -1,13 +1,85 @@
+app: stevena-validate-app
 # TODO replace `stevena` with unique prefix for naming/identifying your deployed resources
 service: stevena-validate # AWS names API Gateway based on service name and does not like long names
 
-# frameworkVersion: "=X.X.X"
+#frameworkVersion: "^1.64.0"
+
+plugins:
+  - serverless-aws-documentation
 
 provider:
   name: aws
   runtime: nodejs10.x
   stage: dev
   apiName: stevena-validate-gateway
+
+custom:
+  # Defines the AWS Gateway API documentation and models using the JSON Schema
+  # see https://github.com/deliveryhero/serverless-aws-documentation for details
+  documentation:
+    api:
+      info:
+        version: '1.0.0' # this will be ignored by API Gateway
+        title: Tickets
+        description: "This is an example of a versioned API to get and post Ticket requests."
+        license:
+          name: MIT
+          url: https://github.com/stevenalexander/aws-lambda-request-validation/blob/master/LICENSE
+      externalDocs:
+        description: Source code
+        url: https://github.com/stevenalexander/aws-lambda-request-validation
+      tags:
+      - name: V1
+        description: "This is the first version of the Tickets API which is currently supported but likely to be depreciated in the future."
+      - name: V2
+        description: "This is a new version of the API which will replace V1 but both are currently supported. It supports submitting Tickets with a new required priority value."
+    models:
+      -
+        name: "v1SubmitTicketRequest"
+        description: "schema for submitting a ticket"
+        contentType: application/json
+        schema: ${file(schema/v1SubmitTicketRequest.json)}
+      -
+        name: v1TicketsResponse
+        contentType: application/json
+        schema:
+          type: array
+          items:
+            $ref: "{{model: v1TicketResponse}}"
+      -
+        name: "v1TicketResponse"
+        description: "schema for a ticket response"
+        contentType: application/json
+        schema: ${file(schema/v1TicketResponse.json)}
+      -
+        name: "v2SubmitTicketRequest"
+        description: "schema for submitting a ticket"
+        contentType: application/json
+        schema: ${file(schema/v2SubmitTicketRequest.json)}
+      -
+        name: v2TicketsResponse
+        contentType: application/json
+        schema:
+          type: array
+          items:
+            $ref: "{{model: v2TicketResponse}}"
+      -
+        name: "v2TicketResponse"
+        description: "schema for a ticket response"
+        contentType: application/json
+        schema: ${file(schema/v2TicketResponse.json)}
+      -
+        name: "validationErrorResponse"
+        description: "schema for validation error response"
+        contentType: application/json
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
+            error:
+              type: string
+              description: JSON string with details on the validation error
 
 functions:
   # Using a single function to demo an API solution split with two versions each with different schema/interface
@@ -18,22 +90,70 @@ functions:
       - http:
           path: v1/tickets
           method: get
+          documentation:
+            summary: "Get all tickets"
+            tags:
+              - "V1"
+            methodResponses:
+              -
+                statusCode: "200"
+                responseBody:
+                  description: "successful operation"
+                responseModels:
+                  application/json: "v1TicketsResponse"
       - http:
           path: v1/tickets
           method: post
           request:
             schema:
-              application/json: ${file(schema_v1_tickets_post.json)}
+              application/json: ${file(schema/v1SubmitTicketRequest.json)}
+          documentation:
+            summary: "Submit a new ticket"
+            tags:
+              - "V1"
+            requestModels:
+              application/json: v1SubmitTicketRequest
+            methodResponses:
+              -
+                statusCode: "201"
+              -
+                statusCode: "400"
+                responseModels:
+                  application/json: "validationErrorResponse"
       # v2
       - http:
           path: v2/tickets
           method: get
+          documentation:
+            summary: "Get all tickets"
+            tags:
+              - "V2"
+            methodResponses:
+              -
+                statusCode: "200"
+                responseBody:
+                  description: "successful operation"
+                responseModels:
+                  application/json: "v2TicketsResponse"
       - http:
           path: v2/tickets
           method: post
           request:
             schema:
-              application/json: ${file(schema_v2_tickets_post.json)}
+              application/json: ${file(schema/v2SubmitTicketRequest.json)}
+          documentation:
+            summary: "Submit a new ticket"
+            tags:
+              - "V2"
+            requestModels:
+              application/json: v2SubmitTicketRequest
+            methodResponses:
+              -
+                statusCode: "201"
+              -
+                statusCode: "400"
+                responseModels:
+                  application/json: "validationErrorResponse"
 
 resources:
   Resources:
@@ -41,12 +161,13 @@ resources:
       Type: AWS::ApiGateway::RestApi
       Properties:
         Name: ${self:provider.stage}-${self:service}
+    # defines the JSON schema request validation message returned by the Gateway
     GatewayResponseResourceNotFound:
       Type: 'AWS::ApiGateway::GatewayResponse'
       Properties:
         RestApiId:
           Ref: 'ApiGatewayRestApi'
         ResponseType: BAD_REQUEST_BODY
-        "StatusCode" : "422"
+        "StatusCode" : "400"
         ResponseTemplates:
           application/json: "{\"message\": \"$context.error.message\", \"error\": \"$context.error.validationErrorString\"}"
