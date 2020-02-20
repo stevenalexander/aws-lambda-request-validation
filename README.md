@@ -4,6 +4,14 @@ This is a PoC to use the [JSON Schema request validation](https://docs.aws.amazo
 
 This validates incoming requests at the API Gateway, before they hit your Lambda functions, against a defined schema. This means you do not need to write custom request validation code into your functions and can tie this to your API documentation, e.g. use the schema to generate OpenAPI specification for your API.
 
+## Component diagram
+
+![component diagram](https://raw.githubusercontent.com/stevenalexander/stevenalexander/aws-lambda-request-validation/master/images/serverless-api-documentation-component-diagram.png "component diagram")
+
+## Development process diagram
+
+![Development process diagram](https://raw.githubusercontent.com/stevenalexander/stevenalexander/aws-lambda-request-validation/master/images/development-process-for-serverless-api.png "Development process diagram")
+
 ## Requires
 
 * NodeJS

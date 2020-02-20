@@ -1,5 +1,0 @@
-{
-  "$schema": "./schema_v1_tickets_post.json",
-  "username":"johnsmith",
-  "description":"This is a test ticket"
-}

@@ -1,0 +1,24 @@
+title Development process for Serverless API
+
+participant Developer
+participant Feature Env
+participant Source
+participant CI
+participant Test Env
+participant Prod Env
+participant User
+
+note right of Developer: Updated serverless.yml, JSON\n schema and lambdas for change
+Developer->Feature Env: Runs serverless command to update \nAPI Gateway and serverless functions
+Developer->Feature Env: Test change
+
+Developer->Source: Commit change
+Source->CI: Build trigger
+
+CI->Test Env: Deploy
+CI->Test Env: Run all tests
+
+CI->Prod Env: Deploy
+
+note right of Prod Env: New OpenAPI docs and \nJSON schema available
+User->Prod Env: Requests
