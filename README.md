@@ -1,5 +1,7 @@
 # Request validation for AWS Lambdas via JSON Schema
 
+Related blog: [Using AWS Gateway validation and documentation to build a coherent serverless API](http://stevenalexander.github.io/2020/02/20/using-aws-gateway-validation-and-documentation-to-build-a-coherent-serverless-api.html)
+
 This is a PoC to use the [JSON Schema request validation](https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-method-request-validation.html) feature for AWS Lambda functions.
 
 This validates incoming requests at the API Gateway, before they hit your Lambda functions, against a defined schema. This means you do not need to write custom request validation code into your functions and can tie this to your API documentation, e.g. use the schema to generate OpenAPI specification for your API.
