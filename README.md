@@ -8,11 +8,11 @@ This validates incoming requests at the API Gateway, before they hit your Lambda
 
 ## Component diagram
 
-![component diagram](https://raw.githubusercontent.com/stevenalexander/stevenalexander/aws-lambda-request-validation/master/images/serverless-api-documentation-component-diagram.png "component diagram")
+![component diagram](https://raw.githubusercontent.com/stevenalexander/aws-lambda-request-validation/master/images/serverless-api-documentation-component-diagram.png "component diagram")
 
 ## Development process diagram
 
-![Development process diagram](https://raw.githubusercontent.com/stevenalexander/stevenalexander/aws-lambda-request-validation/master/images/development-process-for-serverless-api.png "Development process diagram")
+![Development process diagram](https://raw.githubusercontent.com/stevenalexander/aws-lambda-request-validation/master/images/development-process-for-serverless-api.png "Development process diagram")
 
 ## Requires
 
@@ -69,3 +69,4 @@ curl -H "Content-Type: application/json" -X POST -d '{"username":"johnsmith","de
 * [AWS Blog - How to remove boilerplate validation logic in your REST APIs with Amazon API Gateway request validation](https://aws.amazon.com/blogs/compute/how-to-remove-boilerplate-validation-logic-in-your-rest-apis-with-amazon-api-gateway-request-validation/)
 * [Stackoverflow question on Serverless Framework](https://stackoverflow.com/questions/51951810/use-swagger-api-validation-with-serverless-framework)
 * [JSON Schema](https://json-schema.org/)
+* [Swagger editor](https://editor.swagger.io/) - online editor to validate and visualise OpenAPI specifications
