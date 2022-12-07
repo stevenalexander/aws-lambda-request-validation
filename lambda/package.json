@@ -16,7 +16,7 @@
     "aws-sdk": "^2.602.0"
   },
   "devDependencies": {
-    "serverless": "^1.64.0",
+    "serverless": "^3.25.1",
     "serverless-aws-documentation": "^1.1.0",
     "standard": "^14.3.1"
   }
